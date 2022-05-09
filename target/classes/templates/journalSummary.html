@@ -18,7 +18,10 @@
     <link type="text/css" rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav
+      class="navbar navbar-expand-lg navbar-dark bg-dark"
+      style="background-color: #09a7c3"
+    >
       <div class="container-fluid">
         <a class="nav-link active" href="#"></a>
         <button
@@ -69,8 +72,8 @@
               >
             </li>
             <li class="nav-item">
-              <a class="nav-link" th:href="@{/fin/rpt/entry}"
-                >Cash Flow Statement</a
+              <a class="nav-link" th:href="@{/fin/txn/oblist}"
+                >Out of Balance</a
               >
             </li>
 
@@ -98,5 +101,80 @@
         </div>
       </div>
     </nav>
+    <div id="wrapper">
+      <div id="header">
+        <h2 align="center">List of Journals</h2>
+      </div>
+      <br />
+    </div>
+    <div th:if="${not #lists.isEmpty(journalRels)}" class="container">
+      <table border="0;" align="center" class="table table-bordered">
+        <col width="4600" />
+        <tr th:each="journalRel : ${journalRels}">
+          <td align="center" th:text="${journalRel.journalMessage}"></td>
+        </tr>
+      </table>
+    </div>
+    <div th:if="${not #lists.isEmpty(journals)}" class="container">
+      <table border="1;" align="center" class="table table-bordered">
+        <col width="100" />
+        <col width="100" />
+        <col width="400" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <!--<col width="200" />-->
+        <tr>
+          <th>Account <br />Mumber</th>
+          <th>Account <br />Title</th>
+          <th>Reason</th>
+          <th>Date</th>
+          <th>Credit/<br />Debit</th>
+          <th>Journal Amount</th>
+          <th>Status</th>
+          <th>Relation<br />Key</th>
+          <th>Actions</th>
+        </tr>
+        <tr th:each="journal : ${journals}">
+          <td align="left" th:text="${journal.accountNumber}"></td>
+          <td align="left" th:text="${journal.accountTitle}"></td>
+          <td align="left" th:text="${journal.journalReason}"></td>
+          <td align="left" th:text="${journal.journalDate}"></td>
+          <td align="left" th:text="${journal.creditDebitInd}"></td>
+          <td align="left" th:text="${journal.journalAmountFmtd}"></td>
+          <td align="left" th:text="${journal.journalStatus}"></td>
+          <td align="left" th:text="${journal.journalsRelKey}"></td>
+          <td>
+            <a
+              th:href="@{/fin/txn/updateForm(journalKey=${journal.journalsKey})}"
+              class="btn btn-secondary btn-sm"
+              ><b>Update</b></a
+            >
+            <!--
+            <a
+              th:href="@{/fin/txn/deleteForm(journalKey=${journal.journalsKey})}"
+              class="btn btn-secondary btn-sm"
+              onclick="if (!(Confirm('Are you sure you want to delete this book?'))) return false"
+              ><b>Delete</b></a
+            >-->
+          </td>
+        </tr>
+      </table>
+      <div id="content" align="center">
+        <a
+          th:href="@{/fin/txn/relentry(journalKey=${journal.journalsRelKey})}"
+          class="btn btn-secondary btn-sm"
+          ><b>Add Related Journal</b></a
+        >
+      </div>
+      <br />
+    </div>
+    <div id="content" align="center">
+      <a th:href="@{/fin/txn/entry}" class="btn btn-secondary btn-sm"
+        ><b>Add New Transaction</b></a
+      >
+    </div>
   </body>
 </html>

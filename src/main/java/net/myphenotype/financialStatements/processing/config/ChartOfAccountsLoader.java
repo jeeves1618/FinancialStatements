@@ -49,7 +49,7 @@ public class ChartOfAccountsLoader implements ApplicationListener<ApplicationRea
         chartOfAccountsList.add(new ChartOfAccounts("90100","Cash Receipts","Cash","Cash Flow Statement"));
         chartOfAccountsList.add(new ChartOfAccounts("90100","Cash Disbursements","Cash","Cash Flow Statement"));
         chartOfAccountsList.add(new ChartOfAccounts("90100","PP&E Purchase","Cash","Cash Flow Statement"));
-        chartOfAccountsList.add(new ChartOfAccounts("90100","Net Borrowings","Cash","Cash Flow Statement"));
+        chartOfAccountsList.add(new ChartOfAccounts("90100","Net Borrowing","Cash","Cash Flow Statement"));
         chartOfAccountsList.add(new ChartOfAccounts("90100","Income Taxes Paid","Cash","Cash Flow Statement"));
         chartOfAccountsList.add(new ChartOfAccounts("90100","Sale of Capital Stock","Cash","Cash Flow Statement"));
 

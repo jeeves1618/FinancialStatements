@@ -4,4 +4,6 @@ import net.myphenotype.financialStatements.processing.entity.ChartOfAccounts;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ChartOfAccountsRepo extends JpaRepository<ChartOfAccounts, Integer> {
+
+    public ChartOfAccounts findByAccountNumber(String accountNumber);
 }

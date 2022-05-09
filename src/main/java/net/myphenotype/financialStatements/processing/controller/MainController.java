@@ -1,14 +1,19 @@
 package net.myphenotype.financialStatements.processing.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import net.myphenotype.financialStatements.processing.domain.JournalRel;
 import net.myphenotype.financialStatements.processing.entity.ChartOfAccounts;
+import net.myphenotype.financialStatements.processing.entity.Journals;
 import net.myphenotype.financialStatements.processing.repo.ChartOfAccountsRepo;
+import net.myphenotype.financialStatements.processing.repo.JournalsRepo;
+import net.myphenotype.financialStatements.processing.service.JournalService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.awt.print.Book;
+import java.util.ArrayList;
 import java.util.List;
 @Slf4j
 @Controller
@@ -20,6 +25,18 @@ public class MainController {
 
     @Autowired
     ChartOfAccounts chartOfAccounts;
+
+    @Autowired
+    Journals journals;
+
+    @Autowired
+    JournalsRepo journalsRepo;
+
+    @Autowired
+    JournalService journalService;
+
+    @Autowired
+    JournalRel journalRel;
 
     @GetMapping(path = "/meta/coa")
     public String getChartOfAccounts(Model model){
@@ -82,18 +99,105 @@ public class MainController {
 
     @GetMapping(path = "/txn/entry")
     public String enterJournals(Model model){
-        //Get the book using the ID from the Service (in turn from DAO and in turn from Table)
-
-
         //Set the Customer as the Model Attribute to Prepopulate the Form
-        model.addAttribute("chartOfAccount",chartOfAccounts);
-
+        model.addAttribute("journal",new Journals());
         //Send the data to the right form
         return "journalEntry";
     }
 
+    @GetMapping(path = "/txn/relentry")
+    public String enterRelJournals(@RequestParam("journalKey") int theID, Model model){
+        //Set the Customer as the Model Attribute to Prepopulate the Form
+        log.info("relID : " + theID);
+        journals.setJournalsRelKey(theID);
+        journals.setJournalsKey(null);
+        journals.setAccountNumber(null);
+        journals.setIncreaseOrDecreaseInd(null);
+        journals.setJournalMessage(null);
+        model.addAttribute("journal",journals);
+        //Send the data to the right form
+        return "journalEntry";
+    }
+
+    @GetMapping(path = "/txn/updateForm")
+    public String updateJournalsForm(@RequestParam("journalKey") int theID, Model model){
+        //Set the Customer as the Model Attribute to Prepopulate the Form
+        model.addAttribute("journal",journals);
+        //Send the data to the right form
+        return "journalEntry";
+    }
+
+    @GetMapping(path = "/txn/deleteForm")
+    public String deleteJournalsForm(@RequestParam("journalKey") int theID, Model model){
+        //Get the Chart Entry using the ID from the Service (in turn from DAO and in turn from Table)
+        Journals entryToBeDeleted = journalsRepo.getById(theID);
+
+        //Set the Customer as the Model Attribute to Prepopulate the Form
+        model.addAttribute("journal",entryToBeDeleted);
+        log.info(entryToBeDeleted.toString());
+
+        //Send the data to the right form
+        return "deleteJnlForm";
+    }
+
+    @PostMapping(path = "/txn/addUpdateJournal")
+    public String addJournal(Model model, @ModelAttribute("journal") Journals journal){
+        log.info("journal.getJournalsRelKey() " + journal.getJournalsRelKey());
+        journals = journalService.saveJournal(journal);
+        log.info("journals.getJournalMessage() = " + journals.getJournalMessage());
+        journalRel.setJournalMessage(journals.getJournalMessage());
+
+        return "redirect:/fin/txn/listadd";
+    }
+
     @GetMapping(path = "/txn/list")
-    public String getJournals(){
+    public String getJournals(Model model){
+        List<Journals> journalsList = journalsRepo.findAll();
+        List<JournalRel> journalRels = new ArrayList<>();
+        Journals journal;
+        if (journalRel.getJournalMessage() != null) journalRels.add(journalRel);
+        if (journalsList.isEmpty())
+        {
+            journal = new Journals();
+        } else {
+            journal = journalsList.get(journalsList.size()-1);
+            log.info("Index " + (journalsList.size()-1));
+            log.info("Last Element " + journalsList.get(journalsList.size()-1).toString());
+        }
+
+        model.addAttribute("journal",journal);
+        model.addAttribute("journals",journalsList);
+        return "journalSummary";
+    }
+
+    @GetMapping(path = "/txn/oblist")
+    public String getCashFlow(Model model){
+        List<Journals> journalsList = journalsRepo.findByJournalStatus("Pending");
+        List<JournalRel> journalRels = new ArrayList<>();
+        Journals journal;
+        if (journalRel.getJournalMessage() != null) journalRels.add(journalRel);
+        if (journalsList.isEmpty())
+        {
+            journal = new Journals();
+        } else {
+            journal = journalsList.get(journalsList.size()-1);
+            log.info("Index " + (journalsList.size()-1));
+            log.info("Last Element " + journalsList.get(journalsList.size()-1).toString());
+        }
+
+        model.addAttribute("journal",journal);
+        model.addAttribute("journals",journalsList);
+        return "journalSummary";
+    }
+
+    @GetMapping(path = "/txn/listadd")
+    public String getAddReadBack(Model model){
+        List<Journals> journalsList = journalsRepo.findAll();
+        List<JournalRel> journalRels = new ArrayList<>();
+        if (journalRel.getJournalMessage() != null) journalRels.add(journalRel);
+        model.addAttribute("journal",journals);
+        model.addAttribute("journalRels",journalRels);
+        model.addAttribute("journals",journalsList);
         return "journalSummary";
     }
 
@@ -116,10 +220,5 @@ public class MainController {
     @GetMapping(path = "/rpt/istmt")
     public String getIncomeStatement(){
         return "incomeStatement";
-    }
-
-    @GetMapping(path = "/rpt/entry")
-    public String getCashFlow(){
-        return "cashFlow";
     }
 }

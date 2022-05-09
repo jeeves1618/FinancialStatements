@@ -1,6 +1,7 @@
 package net.myphenotype.financialStatements.processing.entity;
 
 import lombok.Data;
+import net.myphenotype.financialStatements.processing.domain.JournalOptions;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
@@ -10,35 +11,39 @@ import javax.validation.constraints.Min;
 @Data
 @Entity
 @Component
-@Table (name = "chart_of_accounts")
+@Table (name = "journals")
 public class Journals {
 
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
-    @Column (name = "chart_of_accounts_key")
-    private Integer chartOfAccountsKey;
-    @Max(5)
-    @Min(5)
+    @Column (name = "journals_key")
+    private Integer journalsKey;
     @Column (name = "account_number")
     private String accountNumber;
-    @Max(350)
-    @Column (name = "account_description")
-    private String accountDescription;
-    @Max(100)
-    @Column (name = "account_type")
-    private String accountType;
-    @Max(100)
-    @Column (name = "financial_Statement")
-    private String financialStatement;
+    @Column (name = "account_title")
+    private String accountTitle;
+    @Transient
+    private String increaseOrDecreaseInd;
+    @Column (name = "journal_amount")
+    private double journalAmount;
+    @Column (name = "journal_date")
+    private String journalDate;
+    @Column (name = "journal_amount_fmtd")
+    private String journalAmountFmtd;
+    @Column (name = "credit_debit_ind")
+    private String creditDebitInd;
+    @Column (name = "journal_reason")
+    private String journalReason;
+    @Column (name = "journal_status")
+    private String journalStatus;
+    @Column (name = "journals_rel_key")
+    private Integer journalsRelKey;
+    @Transient
+    private JournalOptions journalOptions;
+    @Transient
+    private String journalMessage;
 
     public Journals() {
-    }
-
-    public Journals(String accountNumber, String accountDescription, String accountType, String financialStatement) {
-        this.accountNumber = accountNumber;
-        this.accountDescription = accountDescription;
-        this.accountType = accountType;
-        this.financialStatement = financialStatement;
     }
 }
 
