@@ -38,6 +38,10 @@ public class Journals {
     private String journalStatus;
     @Column (name = "journals_rel_key")
     private Integer journalsRelKey;
+    @Column (name = "debit_amount_fmtd")
+    private String debitAmountFmtd;
+    @Column (name = "credit_amount_fmtd")
+    private String creditAmountFmtd;
     @Transient
     private JournalOptions journalOptions;
     @Transient

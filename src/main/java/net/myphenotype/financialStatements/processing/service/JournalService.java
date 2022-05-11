@@ -30,6 +30,12 @@ public class JournalService {
         ChartResponsePayload chartResponsePayload = chartService.getCreditOrDebit(journal.getAccountNumber(), journal.getIncreaseOrDecreaseInd());
         journal.setJournalAmountFmtd(rf.formattedRupee(ft.format(journal.getJournalAmount())));
         journal.setCreditDebitInd(chartResponsePayload.getCreditOrDebit());
+        if (journal.getCreditDebitInd().equals("Credit")){
+            journal.setCreditAmountFmtd(journal.getJournalAmountFmtd());
+        }
+        else {
+            journal.setDebitAmountFmtd(journal.getJournalAmountFmtd());
+        }
         journal.setAccountTitle(chartResponsePayload.getAccountTitle());
         journal.setJournalStatus("Pending");
         journalsRepo.save(journal);

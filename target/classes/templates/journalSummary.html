@@ -132,7 +132,8 @@
           <th>Reason</th>
           <th>Date</th>
           <th>Credit/<br />Debit</th>
-          <th>Journal Amount</th>
+          <th>Debit</th>
+          <th>Credit</th>
           <th>Status</th>
           <th>Relation<br />Key</th>
           <th>Actions</th>
@@ -143,7 +144,8 @@
           <td align="left" th:text="${journal.journalReason}"></td>
           <td align="left" th:text="${journal.journalDate}"></td>
           <td align="left" th:text="${journal.creditDebitInd}"></td>
-          <td align="left" th:text="${journal.journalAmountFmtd}"></td>
+          <td align="left" th:text="${journal.debitAmountFmtd}"></td>
+          <td align="left" th:text="${journal.creditAmountFmtd}"></td>
           <td align="left" th:text="${journal.journalStatus}"></td>
           <td align="left" th:text="${journal.journalsRelKey}"></td>
           <td>
