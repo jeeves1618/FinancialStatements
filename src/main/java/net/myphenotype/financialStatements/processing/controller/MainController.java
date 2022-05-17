@@ -2,11 +2,15 @@ package net.myphenotype.financialStatements.processing.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import net.myphenotype.financialStatements.processing.domain.JournalRel;
+import net.myphenotype.financialStatements.processing.domain.Ledger;
+import net.myphenotype.financialStatements.processing.domain.TrialBalance;
 import net.myphenotype.financialStatements.processing.entity.ChartOfAccounts;
 import net.myphenotype.financialStatements.processing.entity.Journals;
 import net.myphenotype.financialStatements.processing.repo.ChartOfAccountsRepo;
 import net.myphenotype.financialStatements.processing.repo.JournalsRepo;
 import net.myphenotype.financialStatements.processing.service.JournalService;
+import net.myphenotype.financialStatements.processing.service.LedgerService;
+import net.myphenotype.financialStatements.processing.service.TrialBalanceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,6 +41,18 @@ public class MainController {
 
     @Autowired
     JournalRel journalRel;
+
+    @Autowired
+    Ledger ledger;
+
+    @Autowired
+    LedgerService ledgerService;
+
+    @Autowired
+    TrialBalanceService trialBalanceService;
+
+    @Autowired
+    TrialBalance trialBalance;
 
     @GetMapping(path = "/meta/coa")
     public String getChartOfAccounts(Model model){
@@ -202,12 +218,16 @@ public class MainController {
     }
 
     @GetMapping(path = "/txn/ledger")
-    public String getLedger(){
+    public String getLedger(Model model){
+        List<Ledger> ledgerList = ledgerService.getLedgerEntries();
+        model.addAttribute("ledgers",ledgerList);
         return "accountLedger";
     }
 
     @GetMapping(path = "/txn/tbalance")
-    public String getTrialBalance(){
+    public String getTrialBalance(Model model){
+        List<TrialBalance> trialBalances = trialBalanceService.getTrialBalanceEntries();
+        model.addAttribute("trialbalances", trialBalances);
         return "trialBalance";
     }
 

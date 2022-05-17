@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>Trial Balance</title>
+    <title>General Ledger</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,7 +18,10 @@
     <link type="text/css" rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav
+      class="navbar navbar-expand-lg navbar-dark bg-dark"
+      style="background-color: #09a7c3"
+    >
       <div class="container-fluid">
         <a class="nav-link active" href="#"></a>
         <button
@@ -47,7 +50,7 @@
             </li>
             <li class="nav-item">
               <a class="nav-link" th:href="@{/fin/txn/ledger}"
-                >Account Ledger</a
+                >General Ledger</a
               >
             </li>
             <li class="nav-item">
@@ -96,5 +99,32 @@
         </div>
       </div>
     </nav>
+    <div id="wrapper">
+      <div id="header">
+        <h2 align="center">Trial Balance</h2>
+      </div>
+      <br />
+    </div>
+
+    <div th:if="${not #lists.isEmpty(trialbalances)}" class="container">
+      <table border="1;" align="center" class="table table-bordered">
+        <col width="850" />
+        <col width="150" />
+        <col width="150" />
+        <tr>
+          <th>Description</th>
+          <th>Debit</th>
+          <th>Credit</th>
+        </tr>
+        <tr
+          th:each="entry, lstat : ${trialbalances}"
+          th:style="${entry.accountTitle == '  Totals'}? 'font-weight: bold;'"
+        >
+          <td align="left" th:text="${entry.accountTitle}"></td>
+          <td align="right" th:text="${entry.debitAmountFmtd}"></td>
+          <td align="right" th:text="${entry.creditAmountFmtd}"></td>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>

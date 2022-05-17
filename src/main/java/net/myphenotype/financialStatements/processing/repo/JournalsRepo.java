@@ -11,4 +11,9 @@ public interface JournalsRepo extends JpaRepository<Journals,Integer> {
 
     public List<Journals> findByJournalStatus(String journalStatus);
 
+    public List<Journals> findByJournalStatusOrderByJournalsRelKeyAsc(String journalStatus);
+
+    public List<Journals> findByJournalStatusOrderByAccountNumberAsc(String journalStatus);
+
+    public List<Journals> findByAccountNumberAndJournalStatus(String accountNumber, String journalStatus);
 }

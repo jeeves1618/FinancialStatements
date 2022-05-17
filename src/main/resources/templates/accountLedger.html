@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
   <head>
-    <title>Account Ledger</title>
+    <title>General Ledger</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,7 +18,10 @@
     <link type="text/css" rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav
+      class="navbar navbar-expand-lg navbar-dark bg-dark"
+      style="background-color: #09a7c3"
+    >
       <div class="container-fluid">
         <a class="nav-link active" href="#"></a>
         <button
@@ -50,7 +53,7 @@
                 class="nav-link active"
                 aria-current="page"
                 th:href="@{/fin/txn/ledger}"
-                >Account Ledger</a
+                >General Ledger</a
               >
             </li>
             <li class="nav-item">
@@ -96,5 +99,46 @@
         </div>
       </div>
     </nav>
+    <div id="wrapper">
+      <div id="header">
+        <h2 align="center">General Ledger of Accounts</h2>
+      </div>
+      <br />
+    </div>
+
+    <div th:if="${not #lists.isEmpty(ledgers)}" class="container">
+      <table border="1;" align="center" class="table table-bordered">
+        <col width="100" />
+        <col width="600" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+        <col width="100" />
+
+        <!--<col width="200" />-->
+        <tr>
+          <th>Date</th>
+          <th>Description</th>
+          <th>Relation<br />Key</th>
+          <th>Credit/<br />Debit</th>
+          <th>Debit</th>
+          <th>Credit</th>
+          <th>Closing<br />Balance</th>
+        </tr>
+        <tr
+          th:each="ledger, lstat : ${ledgers}"
+          th:style="${ledger.ledgerDate == null}? 'font-weight: bold;'"
+        >
+          <td align="left" th:text="${ledger.ledgerDate}"></td>
+          <td align="left" th:text="${ledger.descriptions}"></td>
+          <td align="left" th:text="${ledger.journalsRelKey}"></td>
+          <td align="left" th:text="${ledger.creditDebitInd}"></td>
+          <td align="left" th:text="${ledger.debitAmountFmtd}"></td>
+          <td align="left" th:text="${ledger.creditAmountFmtd}"></td>
+          <td align="left" th:text="${ledger.balanceAmountFmtd}"></td>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>

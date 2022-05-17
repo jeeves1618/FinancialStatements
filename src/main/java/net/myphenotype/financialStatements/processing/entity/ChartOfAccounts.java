@@ -31,15 +31,18 @@ public class ChartOfAccounts {
     @Max(100)
     @Column (name = "financial_Statement")
     private String financialStatement;
+    @Column (name = "prior_accounting_period_bal")
+    private double priorAcctPeriodBal;
 
     public ChartOfAccounts() {
     }
 
-    public ChartOfAccounts(String accountNumber, String accountDescription, String accountType, String financialStatement) {
+    public ChartOfAccounts(String accountNumber, String accountDescription, String accountType, String financialStatement, double priorAcctPeriodBal) {
         this.accountNumber = accountNumber;
         this.accountDescription = accountDescription;
         this.accountType = accountType;
         this.financialStatement = financialStatement;
+        this.priorAcctPeriodBal = priorAcctPeriodBal;
     }
 }
 
