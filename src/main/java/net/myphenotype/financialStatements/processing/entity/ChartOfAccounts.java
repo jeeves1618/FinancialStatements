@@ -33,6 +33,8 @@ public class ChartOfAccounts {
     private String financialStatement;
     @Column (name = "prior_accounting_period_bal")
     private double priorAcctPeriodBal;
+    @Column (name = "reporting_order")
+    private Integer reportingOrder;
 
     public ChartOfAccounts() {
     }

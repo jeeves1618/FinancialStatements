@@ -1,6 +1,7 @@
 package net.myphenotype.financialStatements.processing.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import net.myphenotype.financialStatements.processing.domain.BalanceSheet;
 import net.myphenotype.financialStatements.processing.domain.JournalRel;
 import net.myphenotype.financialStatements.processing.domain.Ledger;
 import net.myphenotype.financialStatements.processing.domain.TrialBalance;
@@ -8,9 +9,7 @@ import net.myphenotype.financialStatements.processing.entity.ChartOfAccounts;
 import net.myphenotype.financialStatements.processing.entity.Journals;
 import net.myphenotype.financialStatements.processing.repo.ChartOfAccountsRepo;
 import net.myphenotype.financialStatements.processing.repo.JournalsRepo;
-import net.myphenotype.financialStatements.processing.service.JournalService;
-import net.myphenotype.financialStatements.processing.service.LedgerService;
-import net.myphenotype.financialStatements.processing.service.TrialBalanceService;
+import net.myphenotype.financialStatements.processing.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -52,7 +51,10 @@ public class MainController {
     TrialBalanceService trialBalanceService;
 
     @Autowired
-    TrialBalance trialBalance;
+    BalanceSheetService balanceSheetService;
+
+    @Autowired
+    IncomeService incomeService;
 
     @GetMapping(path = "/meta/coa")
     public String getChartOfAccounts(Model model){
@@ -232,13 +234,17 @@ public class MainController {
     }
 
     @GetMapping(path = "/rpt/bsheet")
-    public String getBalanceSheet(){
+    public String getBalanceSheet(Model model){
+        List<BalanceSheet> balanceSheetEntries = balanceSheetService.getBalanceSheetEntries();
+        model.addAttribute("balances", balanceSheetEntries);
         return "balanceSheet";
     }
 
 
     @GetMapping(path = "/rpt/istmt")
-    public String getIncomeStatement(){
+    public String getIncomeStatement(Model model){
+        List<BalanceSheet> incomeEntries = incomeService.getIncomeEntries();
+        model.addAttribute("balances", incomeEntries);
         return "incomeStatement";
     }
 }
