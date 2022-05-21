@@ -46,6 +46,10 @@ public class Journals {
     private JournalOptions journalOptions;
     @Transient
     private String journalMessage;
+    @Transient
+    private String cashAccountNumber;
+    @Column (name = "origin_indicator")
+    private String originIndicator;
 
     public Journals() {
     }

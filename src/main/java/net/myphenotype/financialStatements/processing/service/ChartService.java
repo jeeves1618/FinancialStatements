@@ -46,4 +46,8 @@ public class ChartService {
         }
         return chartResponsePayload;
     }
+
+    public String getStatementType(String accountNumber){
+        return chartOfAccountsRepo.findByAccountNumber(accountNumber).getFinancialStatement();
+    }
 }

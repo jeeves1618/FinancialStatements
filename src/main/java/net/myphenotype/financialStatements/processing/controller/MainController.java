@@ -30,6 +30,9 @@ public class MainController {
     ChartOfAccounts chartOfAccounts;
 
     @Autowired
+    ChartService chartService;
+
+    @Autowired
     Journals journals;
 
     @Autowired
@@ -55,6 +58,9 @@ public class MainController {
 
     @Autowired
     IncomeService incomeService;
+
+    @Autowired
+    CashService cashService;
 
     @GetMapping(path = "/meta/coa")
     public String getChartOfAccounts(Model model){
@@ -160,12 +166,24 @@ public class MainController {
 
     @PostMapping(path = "/txn/addUpdateJournal")
     public String addJournal(Model model, @ModelAttribute("journal") Journals journal){
-        log.info("journal.getJournalsRelKey() " + journal.getJournalsRelKey());
+        log.info("journal.getCashAccountNumber() " + journal.getCashAccountNumber());
+        if (journal.getCashAccountNumber() != null) {
+            journal.setAccountNumber(journal.getCashAccountNumber());
+        }
+        if (chartService.getStatementType(journal.getAccountNumber()).equals("Cash Flow"))
+            journal.setJournalsKey(null);
         journals = journalService.saveJournal(journal);
         log.info("journals.getJournalMessage() = " + journals.getJournalMessage());
         journalRel.setJournalMessage(journals.getJournalMessage());
+        if (journal.getAccountNumber().equals("10100") && (journal.getCashAccountNumber() == null))
+        {
+            journal.setAccountNumber("00");
+            model.addAttribute(journal);
+            return "cashAccountEntry";
+        }
 
-        return "redirect:/fin/txn/listadd";
+        else
+            return "redirect:/fin/txn/listadd";
     }
 
     @GetMapping(path = "/txn/list")
@@ -189,7 +207,7 @@ public class MainController {
     }
 
     @GetMapping(path = "/txn/oblist")
-    public String getCashFlow(Model model){
+    public String getOutOfBalance(Model model){
         List<Journals> journalsList = journalsRepo.findByJournalStatus("Pending");
         List<JournalRel> journalRels = new ArrayList<>();
         Journals journal;
@@ -246,5 +264,12 @@ public class MainController {
         List<BalanceSheet> incomeEntries = incomeService.getIncomeEntries();
         model.addAttribute("balances", incomeEntries);
         return "incomeStatement";
+    }
+
+    @GetMapping(path = "/txn/cflist")
+    public String getCashFlow(Model model){
+        List<BalanceSheet> cashEntries = cashService.getCashEntries();
+        model.addAttribute("balances", cashEntries);
+        return "cashFlow";
     }
 }

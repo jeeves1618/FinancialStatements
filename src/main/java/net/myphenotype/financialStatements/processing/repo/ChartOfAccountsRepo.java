@@ -10,4 +10,6 @@ public interface ChartOfAccountsRepo extends JpaRepository<ChartOfAccounts, Inte
     public ChartOfAccounts findByAccountNumber(String accountNumber);
 
     public List<ChartOfAccounts> findByFinancialStatement(String financialStatement);
+
+    public List<ChartOfAccounts> findByFinancialStatementNot(String financialStatement);
 }

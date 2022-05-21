@@ -37,7 +37,13 @@ public class JournalService {
             journal.setDebitAmountFmtd(journal.getJournalAmountFmtd());
         }
         journal.setAccountTitle(chartResponsePayload.getAccountTitle());
-        journal.setJournalStatus("Pending");
+        if (chartService.getStatementType(journal.getAccountNumber()).equals("Cash Flow"))
+            journal.setJournalStatus("Posted");
+        else if (chartService.getStatementType(journal.getAccountNumber()).equals("Income Statement"))
+            journal.setJournalStatus("Balanced");
+        else
+            journal.setJournalStatus("Pending");
+        log.info("Saving the journal : " + journal.toString());
         journalsRepo.save(journal);
         if (journal.getJournalsRelKey() != null) relKey = journal.getJournalsRelKey();
         else relKey = journal.getJournalsKey();
@@ -45,13 +51,13 @@ public class JournalService {
         journal.setJournalsRelKey(relKey);
 
         if (differenceCreditDebit(relKey) == 0) {
-            List<Journals> journalsList = journalsRepo.findByJournalsRelKey(relKey);
+            List<Journals> journalsList = journalsRepo.findNonStatementJournals(relKey,"Cash Flow");
             for (Journals journals : journalsList) {
                 journals.setJournalStatus("Balanced");
                 journalsRepo.save(journals);
             }
         } else {
-            List<Journals> journalsList = journalsRepo.findByJournalsRelKey(relKey);
+            List<Journals> journalsList = journalsRepo.findNonStatementJournals(relKey,"Cash Flow");
             for (Journals journals : journalsList) {
                 journals.setJournalStatus("Pending");
                 journalsRepo.save(journals);
@@ -61,11 +67,12 @@ public class JournalService {
         log.info(journal.getJournalMessage());
         return journal;
     }
+
     private double differenceCreditDebit(Integer relKey){
         log.info("Rel Key " + relKey);
         double creditSum = 0.00, debitSum = 0.00;
 
-        List<Journals> journalsList = journalsRepo.findByJournalsRelKey(relKey);
+        List<Journals> journalsList = journalsRepo.findNonStatementJournals(relKey,"Cash Flow");
         if (journalsList.isEmpty()) {
             Journals journal = journalsRepo.getById(relKey);
             if (journal.getCreditDebitInd().equals("Credit")) creditSum = creditSum + journal.getJournalAmount();
@@ -81,5 +88,4 @@ public class JournalService {
         log.info("Credit Sum " + creditSum);
         return creditSum - debitSum;
     }
-
 }

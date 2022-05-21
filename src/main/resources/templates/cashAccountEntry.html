@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Journal Entry</title>
+        <title>Cash Account Entry</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -98,7 +98,7 @@
         </nav>
         <div id="wrapper">
           <div id="header">
-            <h2 align="center">Journal Entry Screen</h2>
+            <h2 align="center">Cash Account Entry</h2>
           </div>
           <br />
         </div>
@@ -110,46 +110,30 @@
 
         <!-- We need to associate this data with customer ID -->
         <input type="hidden" th:field="*{journalsKey}" />
+        <input type="hidden" th:field="*{journalAmount}" />
+        <input type="hidden" th:field="*{journalReason}" />
+        <input type="hidden" th:field="*{journalDate}" />
+        <input type="hidden" th:field="*{journalsRelKey}" />
         <table>
 			<col width="800">
 			<col width="500">
             <tbody>
                 <tr>
-                    <td align="left"><label>Account Number : </label></td>
+                    <td align="left"><label>Your transaction has created a cash flow. Please enter the cash flow account number : </label></td>
                     <td><input type="text" th:field="*{accountNumber}" /></td>
                 </tr>
-
-                <tr>
-                    <td align="left"><label>Transaction Objective : </label></td>
-                    <td>
-                      <!--<input type="text" th:field="*{increaseOrDecreaseInd}" /> -->
-                      <select th:field="*{increaseOrDecreaseInd}">
-                        <option th:value="'I'" th:text="Increase        "></option>
-                        <option th:value="'D'" th:text="Decrease        "></option>
-                    </select>
-                    </td>
-                </tr>
                 
                 <tr>
-                    <td align="left"><label>Journal Amount : </label></td>
-                    <td><input type="text" th:field="*{journalAmount}" /></td>
-                </tr>
-                
-                <tr>
-                  <td align="left"><label>Journal Reason : </label></td>
-                  <td><input type="text" th:field="*{journalReason}" /></td>
-                </tr>
-
-                <tr>
-                  <td align="left"><label>Journal Date : </label></td>
-                  <td><input type="date" th:field="*{journalDate}" /></td>
+                  <td align="left"><label>Do you want to increase or decrease the cash in the account? : </label></td>
+                  <td>
+                    <!--<input type="text" th:field="*{increaseOrDecreaseInd}" /> -->
+                    <select th:field="*{increaseOrDecreaseInd}">
+                      <option th:value="'I'" th:text="Increase        "></option>
+                      <option th:value="'D'" th:text="Decrease        "></option>
+                  </select>
+                  </td>
               </tr>
 
-              <tr>
-                <td align="left"><label>Relation Key : </label></td>
-                <td><input type="text" th:field="*{journalsRelKey}" /></td>
-            </tr>
-              
               <tr>
                   <td align="center" colspan=2><input type="submit" value="Save" class="save" /></td>
               </tr>

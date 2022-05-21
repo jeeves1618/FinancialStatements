@@ -11,4 +11,5 @@ public class ChartResponsePayload {
     private String accountTitle;
     private double priorAcctPeriodBal;
     private String increaseOrDecreaseInd;
+    private String financialStatement;
 }

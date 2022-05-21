@@ -39,7 +39,7 @@ public class TrialBalanceService {
 
     public List<TrialBalance> getTrialBalanceEntries(){
         List<TrialBalance> trialBalances = new ArrayList<>();
-        List<ChartOfAccounts> chartOfAccountsList = chartOfAccountsRepo.findAll();
+        List<ChartOfAccounts> chartOfAccountsList = chartOfAccountsRepo.findByFinancialStatementNot("Cash Flow");
         double creditTotal = 0.00, debitTotal = 0.00;
         for (ChartOfAccounts chart: chartOfAccountsList){
             double creditsForAccount = 0.00, debitsForAccount = 0.00;

@@ -71,19 +71,14 @@
                     >Income Statement</a
                   >
                 </li>
+    
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{/fin/txn/cflist}">Cash Flow</a>
+                </li>
+
                 <li class="nav-item">
                   <a class="nav-link" th:href="@{/fin/txn/oblist}"
                     >Out of Balance</a
-                  >
-                </li>
-    
-                <li class="nav-item">
-                  <a
-                    class="nav-link"
-                    href="#"
-                    tabindex="-1"
-                    aria-disabled="true"
-                    >Admin</a
                   >
                 </li>
               </ul>
@@ -126,7 +121,13 @@
 
                 <tr>
                     <td align="left"><label>Transaction Objective : </label></td>
-                    <td><input type="text" th:field="*{increaseOrDecreaseInd}" /></td>
+                    <td>
+                      <!--<input type="text" th:field="*{increaseOrDecreaseInd}" /> -->
+                      <select th:field="*{increaseOrDecreaseInd}">
+                        <option th:value="'I'" th:text="Increase        "></option>
+                        <option th:value="'D'" th:text="Decrease        "></option>
+                    </select>
+                    </td>
                 </tr>
                 
                 <tr>

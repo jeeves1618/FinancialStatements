@@ -55,6 +55,15 @@ public class ChartOfAccountsLoader implements ApplicationListener<ApplicationRea
         chartOfAccountsList.add(new ChartOfAccounts("80200","Income Taxes","Expenditure","Income Statement",0.00));
         chartOfAccountsList.add(new ChartOfAccounts("90900","Net Income","Revenue","Income Statement",0.00));
 
+        chartOfAccountsList.add(new ChartOfAccounts("00100","Beginning Cash Balance","Asset","Cash Flow",0.00));
+        chartOfAccountsList.add(new ChartOfAccounts("00200","Cash Receipts","Asset","Cash Flow",0.00));
+        chartOfAccountsList.add(new ChartOfAccounts("00300","Cash Disbursements","Liabilities","Cash Flow",0.00));
+        chartOfAccountsList.add(new ChartOfAccounts("00400","Cash Flow from Operations","Asset","Cash Flow",0.00));
+        chartOfAccountsList.add(new ChartOfAccounts("00500","PP&E Purchase","Liabilities","Cash Flow",0.00));
+        chartOfAccountsList.add(new ChartOfAccounts("00600","Net Borrowings","Asset","Cash Flow",0.00));
+        chartOfAccountsList.add(new ChartOfAccounts("00700","Income Taxes Paid","Liabilities","Cash Flow",0.00));
+        chartOfAccountsList.add(new ChartOfAccounts("00800","Sale of Capital Stock","Asset","Cash Flow",0.00));
+        chartOfAccountsList.add(new ChartOfAccounts("00900","Ending Cash Balance","Asset","Cash Flow",0.00));
 
         chartOfAccountsRepo.saveAll(chartOfAccountsList);
 

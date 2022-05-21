@@ -67,16 +67,18 @@
               >
             </li>
             <li class="nav-item">
-              <a
-                class="nav-link active"
-                aria-current="page"
-                th:href="@{/fin/txn/oblist}"
+              <a class="nav-link" th:href="@{/fin/txn/oblist}"
                 >Out of Balance</a
               >
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="#">Cash Flow</a>
+              <a
+                class="nav-link active"
+                aria-current="page"
+                th:href="@{/fin/txn/cflist}"
+                >Cash Flow</a
+              >
             </li>
           </ul>
           <form class="d-flex">
@@ -93,5 +95,33 @@
         </div>
       </div>
     </nav>
+    <div id="wrapper">
+      <div id="header">
+        <h2 align="center">Cash Flow Statement</h2>
+        <p align="center"><i>for the period</i></p>
+      </div>
+      <br />
+    </div>
+
+    <div th:if="${not #lists.isEmpty(balances)}" class="container">
+      <table border="0;" align="center" class="table table-bordered">
+        <col width="150" />
+        <col width="850" />
+        <col width="150" />
+        <tr>
+          <th>Formula</th>
+          <th>Description</th>
+          <th>Amount</th>
+        </tr>
+        <tr
+          th:each="entry, lstat : ${balances}"
+          th:style="${entry.accountTitle == '  Totals'}? 'font-weight: bold;'"
+        >
+          <td align="left" th:text="${entry.formulaString}"></td>
+          <td align="left" th:text="${entry.accountTitle}"></td>
+          <td align="right" th:text="${entry.balanceFmtd}"></td>
+        </tr>
+      </table>
+    </div>
   </body>
 </html>

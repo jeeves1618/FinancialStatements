@@ -28,6 +28,9 @@ public class BalanceSheetService {
     private ChartService chartService;
 
     @Autowired
+    private IncomeService incomeService;
+
+    @Autowired
     private RupeeFormatter rf;
 
     @Autowired
@@ -42,7 +45,7 @@ public class BalanceSheetService {
         String[] formalaArray = {"A","B","C","D","A + B + C + D = E","F","G","H","G - H = I","E + F + I = J",
                 "K","L","M","N","K + L + M + N = O","P","Q","R","Q + R = S","O + P + S = T"};
 
-        double creditTotal = 0.00, debitTotal = 0.00, currentAssets = 0.00, netFixedAssets = 0.00,
+        double creditTotal = 0.00, retainedEarnings = 0.00, currentAssets = 0.00, netFixedAssets = 0.00,
                 otherAssets = 0.00, currentLiabilities = 0.00, longTermDebt = 0.00, shareHolderEquity = 0.00;
         for (ChartOfAccounts chart: chartOfAccountsList){
             double creditsForAccount = 0.00, debitsForAccount = 0.00;
@@ -88,15 +91,22 @@ public class BalanceSheetService {
                         longTermDebt = longTermDebt + creditsForAccount - debitsForAccount;
                         break;
                     case "Q" :
-                    case "R" :
                         shareHolderEquity = shareHolderEquity + creditsForAccount - debitsForAccount;
+                        break;
+                    case "R" :
+                        retainedEarnings = retainedEarnings + getBottomLine();
                         break;
                     default:
                         break;
                 }
             }
-            if (formalaArray[rowCount].length() == 1)
+            if (formalaArray[rowCount].length() == 1 && !formalaArray[rowCount].equals("R"))
                 balanceSheet.setAccountTitle(chart.getAccountDescription());
+            else if (formalaArray[rowCount].equals("R")){
+                balanceSheet.setBalance(retainedEarnings);
+                balanceSheet.setBalanceFmtd(rf.formattedRupee(ft.format(retainedEarnings)));
+                balanceSheet.setAccountTitle(chart.getAccountDescription());
+            }
             else if (formalaArray[rowCount].equals("A + B + C + D = E")) {
                 balanceSheet.setBalance(currentAssets);
                 balanceSheet.setBalanceFmtd(rf.formattedRupee(ft.format(currentAssets)));
@@ -119,13 +129,13 @@ public class BalanceSheetService {
                 balanceSheet.setAccountTitle(chart.getAccountDescription());
             }
             else if (formalaArray[rowCount].equals("Q + R = S")){
-                balanceSheet.setBalance(shareHolderEquity);
-                balanceSheet.setBalanceFmtd(rf.formattedRupee(ft.format(shareHolderEquity)));
+                balanceSheet.setBalance(shareHolderEquity + retainedEarnings);
+                balanceSheet.setBalanceFmtd(rf.formattedRupee(ft.format(shareHolderEquity + retainedEarnings)));
                 balanceSheet.setAccountTitle(chart.getAccountDescription());
             }
             else if (formalaArray[rowCount].equals("O + P + S = T")){
-                balanceSheet.setBalance(shareHolderEquity + currentLiabilities + longTermDebt);
-                balanceSheet.setBalanceFmtd(rf.formattedRupee(ft.format(shareHolderEquity + currentLiabilities + longTermDebt)));
+                balanceSheet.setBalance(shareHolderEquity + currentLiabilities + longTermDebt + + retainedEarnings);
+                balanceSheet.setBalanceFmtd(rf.formattedRupee(ft.format(shareHolderEquity + currentLiabilities + longTermDebt + retainedEarnings)));
                 balanceSheet.setAccountTitle(chart.getAccountDescription());
             }
             else
@@ -136,5 +146,21 @@ public class BalanceSheetService {
             rowCount++;
         }
         return balanceSheetList;
+    }
+
+    private double getBottomLine(){
+        List<BalanceSheet> incomeStatement = incomeService.getIncomeEntries();
+        double netIncome = 0.00;
+        for(BalanceSheet entry:incomeStatement){
+            switch (entry.getFormulaString()){
+                case "8 + 9 - 10 = 11" :
+                    netIncome = entry.getBalance();
+                    break;
+                default:
+                    break;
+            }
+
+        }
+        return netIncome;
     }
 }
