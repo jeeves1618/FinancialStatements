@@ -1,10 +1,7 @@
 package net.myphenotype.financialStatements.processing.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import net.myphenotype.financialStatements.processing.domain.BalanceSheet;
-import net.myphenotype.financialStatements.processing.domain.JournalRel;
-import net.myphenotype.financialStatements.processing.domain.Ledger;
-import net.myphenotype.financialStatements.processing.domain.TrialBalance;
+import net.myphenotype.financialStatements.processing.domain.*;
 import net.myphenotype.financialStatements.processing.entity.ChartOfAccounts;
 import net.myphenotype.financialStatements.processing.entity.Journals;
 import net.myphenotype.financialStatements.processing.repo.ChartOfAccountsRepo;
@@ -61,6 +58,9 @@ public class MainController {
 
     @Autowired
     CashService cashService;
+
+    @Autowired
+    UIMetaData uiMetaData;
 
     @GetMapping(path = "/meta/coa")
     public String getChartOfAccounts(Model model){
@@ -200,7 +200,9 @@ public class MainController {
             log.info("Index " + (journalsList.size()-1));
             log.info("Last Element " + journalsList.get(journalsList.size()-1).toString());
         }
-
+        uiMetaData.setTitleText("List of Journals");
+        uiMetaData.setEnableButtonIndicator("Yes");
+        model.addAttribute("uiMeta",uiMetaData);
         model.addAttribute("journal",journal);
         model.addAttribute("journals",journalsList);
         return "journalSummary";
@@ -220,7 +222,9 @@ public class MainController {
             log.info("Index " + (journalsList.size()-1));
             log.info("Last Element " + journalsList.get(journalsList.size()-1).toString());
         }
-
+        uiMetaData.setTitleText("Out of Balance Journals");
+        uiMetaData.setEnableButtonIndicator("Yes");
+        model.addAttribute("uiMeta",uiMetaData);
         model.addAttribute("journal",journal);
         model.addAttribute("journals",journalsList);
         return "journalSummary";
@@ -240,7 +244,9 @@ public class MainController {
             log.info("Index " + (journalsList.size()-1));
             log.info("Last Element " + journalsList.get(journalsList.size()-1).toString());
         }
-
+        uiMetaData.setTitleText("List of Cash Entries");
+        uiMetaData.setEnableButtonIndicator("No");
+        model.addAttribute("uiMeta",uiMetaData);
         model.addAttribute("journal",journal);
         model.addAttribute("journals",journalsList);
         return "journalSummary";
