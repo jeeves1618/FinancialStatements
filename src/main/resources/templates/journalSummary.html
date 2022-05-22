@@ -71,14 +71,14 @@
                 >Income Statement</a
               >
             </li>
+
+            <li class="nav-item">
+              <a class="nav-link" th:href="@{/fin/txn/cflist}">Cash Flow</a>
+            </li>
             <li class="nav-item">
               <a class="nav-link" th:href="@{/fin/txn/oblist}"
                 >Out of Balance</a
               >
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{/fin/txn/cflist}">Cash Flow</a>
             </li>
           </ul>
           <form class="d-flex">
@@ -138,8 +138,8 @@
           <td align="left" th:text="${journal.journalReason}"></td>
           <td align="left" th:text="${journal.journalDate}"></td>
           <td align="left" th:text="${journal.creditDebitInd}"></td>
-          <td align="left" th:text="${journal.debitAmountFmtd}"></td>
-          <td align="left" th:text="${journal.creditAmountFmtd}"></td>
+          <td align="right" th:text="${journal.debitAmountFmtd}"></td>
+          <td align="right" th:text="${journal.creditAmountFmtd}"></td>
           <td align="left" th:text="${journal.journalStatus}"></td>
           <td align="left" th:text="${journal.journalsRelKey}"></td>
           <td>

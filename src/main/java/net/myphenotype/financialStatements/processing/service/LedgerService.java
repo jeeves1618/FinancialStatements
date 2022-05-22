@@ -37,7 +37,6 @@ public class LedgerService {
     public List<Ledger> getLedgerEntries(){
         List<Ledger> ledgerList = new ArrayList<>();
         List<Journals> journalsList = journalsRepo.findByJournalStatusOrderByAccountNumberAsc("Balanced");
-        log.info("The number of journals retrieved " + journalsList.size());
         Ledger blankledger = new Ledger();
         String increaseDecreaseInd = null;
         double creditTotal = 0.00, debitTotal = 0.00, balance = 0.00;
@@ -63,16 +62,17 @@ public class LedgerService {
 
             log.info("ledger : " + ledger.toString());
 
+            log.info("Inputs : " + journals.getAccountNumber() + journals.getCreditDebitInd());
+            ChartResponsePayload chartResponsePayload = chartService.getIncreaseOrDecrease(journals.getAccountNumber(),journals.getCreditDebitInd());
+            increaseDecreaseInd = chartResponsePayload.getIncreaseOrDecreaseInd();
             if (!tempJrnlKey.equals(journals.getAccountNumber())){
                 blankledger = new Ledger();
                 blankledger.setDescriptions("Account No : " + journals.getAccountNumber() + "     Account : " + journals.getAccountTitle());
                 ledgerList.add(blankledger);
                 tempJrnlKey = journals.getAccountNumber();
-                ChartResponsePayload chartResponsePayload = chartService.getIncreaseOrDecrease(journals.getAccountNumber(),journals.getCreditDebitInd());
                 balance = chartResponsePayload.getPriorAcctPeriodBal();
-                log.info("The Balance for the new account is : " + rf.formattedRupee(ft.format(balance)));
-                increaseDecreaseInd = chartResponsePayload.getIncreaseOrDecreaseInd();
             }
+            log.info("Output : " + increaseDecreaseInd);
             if (increaseDecreaseInd.equals("I"))
                 balance = balance + journals.getJournalAmount();
             else

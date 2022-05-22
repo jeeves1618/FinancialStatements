@@ -1,11 +1,13 @@
 package net.myphenotype.financialStatements.processing.service;
 
+import lombok.extern.slf4j.Slf4j;
 import net.myphenotype.financialStatements.processing.domain.ChartResponsePayload;
 import net.myphenotype.financialStatements.processing.entity.ChartOfAccounts;
 import net.myphenotype.financialStatements.processing.repo.ChartOfAccountsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class ChartService {
 
@@ -36,6 +38,7 @@ public class ChartService {
         ChartResponsePayload chartResponsePayload =new ChartResponsePayload();
         chartResponsePayload.setPriorAcctPeriodBal(chart.getPriorAcctPeriodBal());
         chartResponsePayload.setAccountTitle(chart.getAccountDescription());
+        log.info("Deep into the rabbit hole : " + chart.getAccountType() + " and " + creditOrDebitInd);
         if (chart.getAccountType().equals("Asset") && creditOrDebitInd.equals("Debit") ||
                 chart.getAccountType().equals("Expenditure") && creditOrDebitInd.equals("Debit")||
                 chart.getAccountType().equals("Liabilities") && creditOrDebitInd.equals("Credit")||

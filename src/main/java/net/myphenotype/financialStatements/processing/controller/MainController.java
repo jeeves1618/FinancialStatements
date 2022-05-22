@@ -188,7 +188,7 @@ public class MainController {
 
     @GetMapping(path = "/txn/list")
     public String getJournals(Model model){
-        List<Journals> journalsList = journalsRepo.findAll();
+        List<Journals> journalsList = journalsRepo.findNonCashJournals("Cash Flow");
         List<JournalRel> journalRels = new ArrayList<>();
         Journals journal;
         if (journalRel.getJournalMessage() != null) journalRels.add(journalRel);
@@ -209,6 +209,26 @@ public class MainController {
     @GetMapping(path = "/txn/oblist")
     public String getOutOfBalance(Model model){
         List<Journals> journalsList = journalsRepo.findByJournalStatus("Pending");
+        List<JournalRel> journalRels = new ArrayList<>();
+        Journals journal;
+        if (journalRel.getJournalMessage() != null) journalRels.add(journalRel);
+        if (journalsList.isEmpty())
+        {
+            journal = new Journals();
+        } else {
+            journal = journalsList.get(journalsList.size()-1);
+            log.info("Index " + (journalsList.size()-1));
+            log.info("Last Element " + journalsList.get(journalsList.size()-1).toString());
+        }
+
+        model.addAttribute("journal",journal);
+        model.addAttribute("journals",journalsList);
+        return "journalSummary";
+    }
+
+    @GetMapping(path = "/txn/cshlist")
+    public String getCashEntries(Model model){
+        List<Journals> journalsList = journalsRepo.findByJournalStatus("Posted");
         List<JournalRel> journalRels = new ArrayList<>();
         Journals journal;
         if (journalRel.getJournalMessage() != null) journalRels.add(journalRel);

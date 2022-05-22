@@ -70,13 +70,12 @@
               >
             </li>
             <li class="nav-item">
+              <a class="nav-link" th:href="@{/fin/txn/cflist}">Cash Flow</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" th:href="@{/fin/txn/oblist}"
                 >Out of Balance</a
               >
-            </li>
-
-            <li class="nav-item">
-              <a class="nav-link" th:href="@{/fin/txn/cflist}">Cash Flow</a>
             </li>
           </ul>
           <form class="d-flex">
@@ -96,7 +95,7 @@
     <div id="wrapper">
       <div id="header">
         <h2 align="center">Income Statement</h2>
-        <p align="center"><i>for the period</i></p>
+        <p align="center" style="color: #f7f8f8"><i>for the period</i></p>
       </div>
       <br />
     </div>
@@ -113,7 +112,7 @@
         </tr>
         <tr
           th:each="entry, lstat : ${balances}"
-          th:style="${entry.accountTitle == '  Totals'}? 'font-weight: bold;'"
+          th:style="${entry.accountTitle == 'Net Sales' or entry.accountTitle == 'Net Income'}? 'font-weight: bold;'"
         >
           <td align="left" th:text="${entry.formulaString}"></td>
           <td align="left" th:text="${entry.accountTitle}"></td>
