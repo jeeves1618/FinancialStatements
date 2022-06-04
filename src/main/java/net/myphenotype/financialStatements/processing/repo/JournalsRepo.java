@@ -13,7 +13,7 @@ public interface JournalsRepo extends JpaRepository<Journals,Integer> {
     @Query("select j from Journals j, ChartOfAccounts c where j.accountNumber = c.accountNumber and j.journalsRelKey = ?1 and c.financialStatement != ?2 ")
     public List<Journals> findNonStatementJournals(Integer journalsRelKey, String Statement);
 
-    @Query("select j from Journals j, ChartOfAccounts c where j.accountNumber = c.accountNumber and c.financialStatement != ?1 ")
+    @Query("select j from Journals j, ChartOfAccounts c where j.accountNumber = c.accountNumber and c.financialStatement != ?1 order by j.journalsKey")
     public List<Journals> findNonCashJournals(String Statement);
 
     @Query("select j from Journals j, ChartOfAccounts c where j.accountNumber = c.accountNumber and j.journalsRelKey = ?1 and c.financialStatement = ?2 ")

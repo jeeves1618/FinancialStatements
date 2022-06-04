@@ -39,8 +39,6 @@ public class JournalService {
         journal.setAccountTitle(chartResponsePayload.getAccountTitle());
         if (chartService.getStatementType(journal.getAccountNumber()).equals("Cash Flow"))
             journal.setJournalStatus("Posted");
-        else if (chartService.getStatementType(journal.getAccountNumber()).equals("Income Statement"))
-            journal.setJournalStatus("Balanced");
         else
             journal.setJournalStatus("Pending");
         log.info("Saving the journal : " + journal.toString());

@@ -257,6 +257,9 @@ public class MainController {
         List<Journals> journalsList = journalsRepo.findAll();
         List<JournalRel> journalRels = new ArrayList<>();
         if (journalRel.getJournalMessage() != null) journalRels.add(journalRel);
+        uiMetaData.setTitleText("List of Journals");
+        uiMetaData.setEnableButtonIndicator("Yes");
+        model.addAttribute("uiMeta",uiMetaData);
         model.addAttribute("journal",journals);
         model.addAttribute("journalRels",journalRels);
         model.addAttribute("journals",journalsList);
